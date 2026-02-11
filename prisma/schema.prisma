@@ -27,10 +27,10 @@ enum VideoStatus {
 model Video {
   id               String      @id @default(uuid()) @db.Uuid
   title            String
-  description      String?
-  release_year     Int?
-  duration_seconds Int?
+  description      String
+  release_year     Int
+  duration_seconds Int
   status           VideoStatus
   created_at       DateTime    @default(now())
-  updated_at       DateTime    @updatedAt
+  updated_at       DateTime?   @updatedAt
 }
