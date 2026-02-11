@@ -7,7 +7,7 @@ export class VideosController {
   constructor(private readonly videosService: VideosService) {}
 
   @Get()
-  findAll(): Video[] {
+  findAll(): Promise<Video[]> {
     return this.videosService.findAll();
   }
 }
