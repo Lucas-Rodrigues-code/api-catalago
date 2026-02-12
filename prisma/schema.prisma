@@ -25,12 +25,61 @@ enum VideoStatus {
 }
 
 model Video {
-  id               String      @id @default(uuid()) @db.Uuid
+  id               String            @id @default(uuid()) @db.Uuid
   title            String
   description      String
   release_year     Int
   duration_seconds Int
   status           VideoStatus
-  created_at       DateTime    @default(now())
-  updated_at       DateTime?   @updatedAt
+  created_at       DateTime          @default(now())
+  updated_at       DateTime?         @updatedAt
+  videoCategories  VideoCategory[]
+  videoCastMembers VideoCastMember[]
+
+  @@map("videos")
+}
+
+model Categories {
+  id              String          @id @default(uuid()) @db.Uuid
+  name            String
+  videoCategories VideoCategory[]
+
+  @@map("categories")
+}
+
+model Genres {
+  id   String @id @default(uuid()) @db.Uuid
+  name String @unique
+
+  @@map("genres")
+}
+
+model VideoCategory {
+  video_id    String @db.Uuid
+  category_id String @db.Uuid
+
+  video    Video      @relation(fields: [video_id], references: [id])
+  category Categories @relation(fields: [category_id], references: [id])
+
+  @@id([video_id, category_id])
+  @@map("video_categories")
+}
+
+model CastMembers {
+  id               String            @id @default(uuid()) @db.Uuid
+  name             String
+  videoCastMembers VideoCastMember[]
+
+  @@map("cast_members")
+}
+
+model VideoCastMember {
+  video_id       String @db.Uuid
+  cast_member_id String @db.Uuid
+
+  video       Video       @relation(fields: [video_id], references: [id])
+  cast_member CastMembers @relation(fields: [cast_member_id], references: [id])
+
+  @@id([video_id, cast_member_id])
+  @@map("video_cast_members")
 }
