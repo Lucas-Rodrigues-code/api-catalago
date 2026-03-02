@@ -1,13 +1,14 @@
 import { Injectable } from '@nestjs/common';
 import { Video } from './entities/video.entity';
 import { VideoRepository } from './videos.repository';
+import { FindAllVideosDto } from './dto/find-all-videos.dto';
 
 @Injectable()
 export class VideosService {
   constructor(private videoRepository: VideoRepository) {}
 
-  async findAll(): Promise<Video[]> {
-    return this.videoRepository.findAll();
+  async findAll(query: FindAllVideosDto): Promise<Video[]> {
+    return this.videoRepository.findAll(query);
   }
 
   async findOne(id: string): Promise<Video | null> {

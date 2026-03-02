@@ -1,13 +1,34 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { Video } from './entities/video.entity';
+import { FindAllVideosDto } from './dto/find-all-videos.dto';
 
 @Injectable()
 export class VideoRepository {
   constructor(private prisma: PrismaService) {}
 
-  async findAll(): Promise<Video[]> {
-    return this.prisma.video.findMany() as Promise<Video[]>;
+  async findAll(query: FindAllVideosDto): Promise<Video[]> {
+    const where: any = {};
+    if (query.year !== undefined) {
+      where.release_year = query.year;
+    }
+
+    if (query.category_id) {
+      where.videoCategories = {
+        some: { category_id: query.category_id },
+      };
+    }
+
+    if (query.genre_id) {
+      where.videoCategories = where.videoCategories || {};
+    }
+
+    return this.prisma.video.findMany({
+      where,
+      skip: (query.page - 1) * query.per_page,
+      take: query.per_page,
+      orderBy: { [query.sort]: query.order },
+    }) as Promise<Video[]>;
   }
 
   async findOne(id: string): Promise<Video | null> {
