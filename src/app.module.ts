@@ -5,9 +5,16 @@ import { VideosModule } from './videos/videos.module';
 import { CategoriesModule } from './categories/categories.module';
 import { CastMembersModule } from './cast-members/cast-members.module';
 import { PrismaModule } from './prisma/prisma.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
-  imports: [PrismaModule, VideosModule, CategoriesModule, CastMembersModule],
+  imports: [
+    AuthModule,
+    PrismaModule,
+    VideosModule,
+    CategoriesModule,
+    CastMembersModule,
+  ],
   controllers: [AppController],
   providers: [AppService],
 })
